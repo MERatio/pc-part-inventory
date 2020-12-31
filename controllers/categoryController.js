@@ -1,7 +1,16 @@
 var Category = require('../models/category');
 
 exports.list = function (req, res) {
-	res.send('NOT IMPLEMENTED: Category list');
+	Category.find().exec(function (err, categories) {
+		if (err) {
+			return next(err);
+		}
+		res.render('categories/list', {
+			title: 'Categories',
+			path: 'categories',
+			categories,
+		});
+	});
 };
 
 exports.createGet = function (req, res) {
