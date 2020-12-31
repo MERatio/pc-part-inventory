@@ -1,0 +1,12 @@
+extends ../layout
+
+block content
+	main(class='container')
+		h1= title
+		ul(class='d-flex flex-wrap categories')
+			each category in categories
+				li(class='w-25 p-2')
+					a(class='card text-center category-card' href=category.url)
+						div(class='card-body')
+							h5(class='card-title category-card-title mb-0') #{category.name}
+						
