@@ -125,24 +125,6 @@ function createCategories(cb) {
       },
       function (callback) {
         categoryCreate(
-          'Motherboard',
-          `The motherboard is the main circuit board of your computer 
-        and is also known as the mainboard or logic board. Basically, 
-        the motherboard is what makes everything in your computer work together.`,
-          callback
-        );
-      },
-      function (callback) {
-        categoryCreate(
-          'Motherboard',
-          `The motherboard is the main circuit board of your computer 
-        and is also known as the mainboard or logic board. Basically, 
-        the motherboard is what makes everything in your computer work together.`,
-          callback
-        );
-      },
-      function (callback) {
-        categoryCreate(
           'Power Supply',
           `Abbreviated as PS or P/S, a power supply or PSU (power supply unit) 
         is a hardware component of a computer that supplies all other components,
