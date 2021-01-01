@@ -5,37 +5,37 @@ console.log(
 );
 
 // Get arguments passed on command line
-var userArgs = process.argv.slice(2);
+const userArgs = process.argv.slice(2);
 /*
 if (!userArgs[0].startsWith('mongodb')) {
     console.log('ERROR: You need to specify a valid mongodb URL as the first argument');
     return
 }
 */
-// var async = require('async');
-// var Book = require('./models/book');
-// var Author = require('./models/author');
-// var Genre = require('./models/genre');
-// var BookInstance = require('./models/bookinstance');
+// const async = require('async');
+// const Book = require('./models/book');
+// const Author = require('./models/author');
+// const Genre = require('./models/genre');
+// const BookInstance = require('./models/bookinstance');
 
-var async = require('async');
-var Category = require('./models/category');
-var Item = require('./models/item');
+const async = require('async');
+const Category = require('./models/category');
+const Item = require('./models/item');
 
-var mongoose = require('mongoose');
-var mongoDB = userArgs[0];
+const mongoose = require('mongoose');
+const mongoDB = userArgs[0];
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = global.Promise;
-var db = mongoose.connection;
+const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-var categories = [];
-var items = [];
+const categories = [];
+const items = [];
 
-function categoryCreate(name, description, cb) {
-  var categoryDetail = { name, description };
-  var category = new Category(categoryDetail);
-  category.save(function (err) {
+const categoryCreate = (name, description, cb) => {
+  const categoryDetail = { name, description };
+  const category = new Category(categoryDetail);
+  category.save((err) => {
     if (err) {
       cb(err, null);
       return;
@@ -44,12 +44,12 @@ function categoryCreate(name, description, cb) {
     categories.push(category);
     cb(null, category);
   });
-}
+};
 
-function itemCreate(name, description, category, price, stock, cb) {
-  var itemDetail = { name, description, category, price, stock };
-  var item = new Item(itemDetail);
-  item.save(function (err) {
+const itemCreate = (name, description, category, price, stock, cb) => {
+  const itemDetail = { name, description, category, price, stock };
+  const item = new Item(itemDetail);
+  item.save((err) => {
     if (err) {
       cb(err, null);
       return;
@@ -57,12 +57,12 @@ function itemCreate(name, description, category, price, stock, cb) {
     console.log('New Item: ' + item);
     cb(null, item);
   });
-}
+};
 
-function createCategories(cb) {
+const createCategories = (cb) => {
   async.series(
     [
-      function (callback) {
+      (callback) => {
         categoryCreate(
           'CPU',
           `The CPU (Central Processing Unit) is the part of a 
@@ -73,7 +73,7 @@ function createCategories(cb) {
           callback
         );
       },
-      function (callback) {
+      (callback) => {
         categoryCreate(
           'CPU cooler',
           `A CPU cooler is device designed to draw heat away from the 
@@ -84,7 +84,7 @@ function createCategories(cb) {
           callback
         );
       },
-      function (callback) {
+      (callback) => {
         categoryCreate(
           'Motherboard',
           `The motherboard is the main circuit board of your computer 
@@ -93,7 +93,7 @@ function createCategories(cb) {
           callback
         );
       },
-      function (callback) {
+      (callback) => {
         categoryCreate(
           'Memory',
           `Computer memory is any physical device capable of storing 
@@ -103,7 +103,7 @@ function createCategories(cb) {
           callback
         );
       },
-      function (callback) {
+      (callback) => {
         categoryCreate(
           'Storage',
           `Whereas memory refers to the location of short-term data, 
@@ -113,7 +113,7 @@ function createCategories(cb) {
           callback
         );
       },
-      function (callback) {
+      (callback) => {
         categoryCreate(
           'Video Card',
           `A video card connects to the motherboard of a computer system 
@@ -123,7 +123,7 @@ function createCategories(cb) {
           callback
         );
       },
-      function (callback) {
+      (callback) => {
         categoryCreate(
           'Power Supply',
           `Abbreviated as PS or P/S, a power supply or PSU (power supply unit) 
@@ -132,7 +132,7 @@ function createCategories(cb) {
           callback
         );
       },
-      function (callback) {
+      (callback) => {
         categoryCreate(
           'Case',
           `A computer case, also known as a computer chassis, tower, system unit, 
@@ -145,12 +145,12 @@ function createCategories(cb) {
     // Optional callback
     cb
   );
-}
+};
 
-function createItems(cb) {
+const createItems = (cb) => {
   async.series(
     [
-      function (callback) {
+      (callback) => {
         itemCreate(
           'AMD Ryzen 5 3600',
           '# of CPU Cores: 6, # of Threads: 12, Base Clock: 3.6GHz, Max Boost Clock: 4.2GHz',
@@ -160,7 +160,7 @@ function createItems(cb) {
           callback
         );
       },
-      function (callback) {
+      (callback) => {
         itemCreate(
           'Intel Core i7-9700K',
           '# of CPU Cores: 8, # of Threads: 8, Base Clock: 4.60Hz, Max Boost Clock: 4.90 GHz',
@@ -174,12 +174,12 @@ function createItems(cb) {
     // Optional callback
     cb
   );
-}
+};
 
 async.series(
   [createCategories, createItems],
   // Optional callback
-  function (err, results) {
+  (err, results) => {
     if (err) {
       console.log('FINAL ERR: ' + err);
     } else {

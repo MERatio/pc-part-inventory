@@ -1,8 +1,8 @@
-var Category = require('../models/category');
+const Category = require('../models/category');
 const { body, validationResult } = require('express-validator');
 
-exports.list = function (req, res) {
-	Category.find().exec(function (err, categories) {
+exports.list = (req, res) => {
+	Category.find().exec((err, categories) => {
 		if (err) {
 			return next(err);
 		}
@@ -14,7 +14,7 @@ exports.list = function (req, res) {
 	});
 };
 
-exports.createGet = function (req, res) {
+exports.createGet = (req, res) => {
 	res.render('categories/form', { title: 'Create Category' });
 };
 
@@ -43,33 +43,29 @@ exports.createPost = [
 		} else {
 			// Data form is valid.
 			const category = new Category(categoryData);
-			category.save(function (err) {
-				if (err) {
-					return next(err);
-				} else {
-					res.redirect(category.url);
-				}
+			category.save((err) => {
+				err ? next(err) : res.redirect(category.url);
 			});
 		}
 	},
 ];
 
-exports.detail = function (req, res) {
+exports.detail = (req, res) => {
 	res.send('NOT IMPLEMENTED: Category detail: ' + req.params.id);
 };
 
-exports.updateGet = function (req, res) {
+exports.updateGet = (req, res) => {
 	res.send('NOT IMPLEMENTED: Category update GET');
 };
 
-exports.updatePost = function (req, res) {
+exports.updatePost = (req, res) => {
 	res.send('NOT IMPLEMENTED: Category update POST');
 };
 
-exports.deleteGet = function (req, res) {
+exports.deleteGet = (req, res) => {
 	res.send('NOT IMPLEMENTED: Category delete GET');
 };
 
-exports.deletePost = function (req, res) {
+exports.deletePost = (req, res) => {
 	res.send('NOT IMPLEMENTED: Category delete POST');
 };

@@ -1,8 +1,8 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
-var ItemSchema = new Schema({
+const ItemSchema = new Schema({
 	name: { type: String, required: true, maxlength: 100 },
 	description: { type: String, required: true, maxlength: 500 },
 	category: { type: Schema.Types.ObjectId, ref: 'Category', required: true },

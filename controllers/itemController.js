@@ -1,33 +1,33 @@
-var Item = require('../models/item');
+const Item = require('../models/item');
 
-exports.list = function (req, res) {
+exports.list = (req, res) => {
 	res.send('NOT IMPLEMENTED: Item list');
 };
 
-exports.createGet = function (req, res) {
+exports.createGet = (req, res) => {
 	res.send('NOT IMPLEMENTED: Item create GET');
 };
 
-exports.createPost = function (req, res) {
+exports.createPost = (req, res) => {
 	res.send('NOT IMPLEMENTED: Item create POST');
 };
 
-exports.detail = function (req, res) {
+exports.detail = (req, res) => {
 	res.send('NOT IMPLEMENTED: Item detail: ' + req.params.id);
 };
 
-exports.updateGet = function (req, res) {
+exports.updateGet = (req, res) => {
 	res.send('NOT IMPLEMENTED: Item update GET');
 };
 
-exports.updatePost = function (req, res) {
+exports.updatePost = (req, res) => {
 	res.send('NOT IMPLEMENTED: Item update POST');
 };
 
-exports.deleteGet = function (req, res) {
+exports.deleteGet = (req, res) => {
 	res.send('NOT IMPLEMENTED: Item delete GET');
 };
 
-exports.deletePost = function (req, res) {
+exports.deletePost = (req, res) => {
 	res.send('NOT IMPLEMENTED: Item delete POST');
 };
