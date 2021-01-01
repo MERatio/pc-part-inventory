@@ -14,7 +14,7 @@ exports.list = function (req, res) {
 };
 
 exports.createGet = function (req, res) {
-	res.send('NOT IMPLEMENTED: Category create GET');
+	res.render('categories/form', { title: 'Create Category' });
 };
 
 exports.createPost = function (req, res) {
