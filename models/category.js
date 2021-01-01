@@ -3,8 +3,13 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var CategorySchema = new Schema({
-	name: { type: String, required: true, maxlength: 100 },
-	description: { type: String, required: true, maxlength: 500 },
+	name: { type: String, required: true, minlength: 3, maxlength: 100 },
+	description: {
+		type: String,
+		required: true,
+		minlength: 10,
+		maxlength: 500,
+	},
 });
 
 CategorySchema.virtual('url').get(function () {
