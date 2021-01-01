@@ -4,6 +4,7 @@
 
 .categories {
 	list-style-type: none;
+	padding-left: 0;
 }
 
 .category-card {
