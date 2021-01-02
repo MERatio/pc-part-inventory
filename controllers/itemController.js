@@ -1,7 +1,19 @@
 const Item = require('../models/item');
 
 exports.list = (req, res) => {
-	res.send('NOT IMPLEMENTED: Item list');
+	Item.find({}, 'name category price stock')
+		.populate('category')
+		.exec((err, items) => {
+			if (err) {
+				next(err);
+			} else {
+				res.render('items/list', {
+					title: 'Computer Parts',
+					path: 'items',
+					items,
+				});
+			}
+		});
 };
 
 exports.createGet = (req, res) => {
