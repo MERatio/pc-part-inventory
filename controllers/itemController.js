@@ -1,6 +1,6 @@
 const Item = require('../models/item');
 
-exports.list = (req, res) => {
+exports.list = (req, res, next) => {
 	Item.find({}, 'name category price stock')
 		.populate('category')
 		.exec((err, items) => {
