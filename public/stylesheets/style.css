@@ -5,6 +5,9 @@
 .categories {
 	list-style-type: none;
 	padding-left: 0;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	gap: 10px;
 }
 
 .category-card {
