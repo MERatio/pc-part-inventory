@@ -1,0 +1,27 @@
+extends ../layout
+
+block content
+	main(class='container-fluid')
+		div(class='row justify-content-center')
+			div(class='col-md-8')
+				header
+					h1= title
+				if items.length === 0
+					h2(class='text-center') No computer parts in our inventory.
+				else
+					table(class='table')
+						thead
+							tr
+								th(scope='col') Name
+								th(scope='col') Category
+								th(scope='col') Price
+								th(scope='col') Stock
+						tbody
+							each item in items
+								tr
+									td
+										a(href=item.url)= item.name
+									td
+										a(href=item.category.url)= item.category.name
+									td(class='fw-bold')= `$${item.price}`
+									td= item.stock
