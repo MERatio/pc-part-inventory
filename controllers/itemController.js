@@ -24,8 +24,21 @@ exports.createPost = (req, res) => {
 	res.send('NOT IMPLEMENTED: Item create POST');
 };
 
-exports.detail = (req, res) => {
-	res.send('NOT IMPLEMENTED: Item detail: ' + req.params.id);
+exports.detail = (req, res, next) => {
+	Item.findById(req.params.id)
+		.populate('category')
+		.exec((err, item) => {
+			if (err) {
+				next(err);
+			} else if (item === null) {
+				const err = new Error('Item not found');
+				err.status = 404;
+				next(err);
+			} else {
+				// Successful, so render.
+				res.render('items/detail', { title: item.name, item });
+			}
+		});
 };
 
 exports.updateGet = (req, res) => {
