@@ -1,0 +1,25 @@
+extends ../layout
+
+block content
+	main(class='container')
+		div(class='row justify-content-center')
+			div(class='col-lg-8')
+				header
+					h1= category.name
+					p= category.description
+				if categoryItems.length === 0
+					h2(class='text-center') No Items in this category.
+				else
+					table(class='table')
+						thead
+							tr
+								th(scope='col') Name
+								th(scope='col') Price
+								th(scope='col') Stock
+						tbody
+							each categoryItem in categoryItems
+								tr
+									td
+										a(href=categoryItem.url)= categoryItem.name
+									td(class='fw-bold')= `$${categoryItem.price}`
+									td= categoryItem.stock
