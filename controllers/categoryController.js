@@ -35,16 +35,18 @@ exports.createPost = [
 	// Process request after validation and sanitization.
 	(req, res, next) => {
 		const errors = validationResult(req);
-		const categoryData = req.body;
+		const category = new Category({
+			name: req.body.name,
+			description: req.body.description,
+		});
 		if (!errors.isEmpty()) {
 			res.render('categories/form', {
 				title: 'Create Category',
-				category: categoryData,
+				category,
 				errors: errors.array(),
 			});
 		} else {
 			// Data form is valid.
-			const category = new Category(categoryData);
 			category.save((err) => {
 				err ? next(err) : res.redirect(category.url);
 			});
