@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const ItemSchema = new Schema({
 	name: { type: String, required: true, maxlength: 100 },
-	description: { type: String, required: true, maxlength: 500 },
+	description: { type: String, required: true, minlength: 10, maxlength: 500 },
 	category: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
 	price: { type: Number, required: true, min: 0, max: 999999 },
 	stock: { type: Number, required: true, min: 0, max: 999999 },
