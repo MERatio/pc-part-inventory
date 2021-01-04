@@ -89,8 +89,19 @@ exports.detail = (req, res, next) => {
 	);
 };
 
-exports.updateGet = (req, res) => {
-	res.send('NOT IMPLEMENTED: Category update GET');
+exports.updateGet = (req, res, next) => {
+	Category.findById(req.params.id).exec((err, category) => {
+		if (err) {
+			next(err);
+		} else if (category === null) {
+			const err = new Error('Category not found');
+			err.status = 404;
+			next(err);
+		} else {
+			//Successful, so render
+			res.render('categories/form', { title: 'Update Category', category });
+		}
+	});
 };
 
 exports.updatePost = (req, res) => {
