@@ -1,4 +1,5 @@
 const Item = require('../models/item');
+const Category = require('../models/category');
 
 exports.list = (req, res, next) => {
 	Item.find({}, 'name category price stock')
@@ -16,8 +17,16 @@ exports.list = (req, res, next) => {
 		});
 };
 
-exports.createGet = (req, res) => {
-	res.send('NOT IMPLEMENTED: Item create GET');
+exports.createGet = (req, res, next) => {
+	Category.find({}, 'name')
+		.sort({ name: 'asc' })
+		.exec((err, categories) => {
+			if (err) {
+				next(err);
+			} else {
+				res.render('items/form', { title: 'Create Item', categories });
+			}
+		});
 };
 
 exports.createPost = (req, res) => {
