@@ -4,8 +4,9 @@ block content
 	main(class='container-fluid')
 		div(class='row justify-content-center')
 			div(class='col-md-8')
-				header
+				header(class='d-flex justify-content-between align-items-center')
 					h1= title
+					a(href='/items/create' class='link-primary') Create new item
 				if items.length === 0
 					h2(class='text-center') No computer parts in our inventory.
 				else
