@@ -34,12 +34,15 @@ exports.createPost = [
 		.withMessage('Description must be 10 to 500 characters long'),
 	// Process request after validation and sanitization.
 	(req, res, next) => {
+		// Extract the validation errors from a request.
 		const errors = validationResult(req);
+		// Create a category object with escaped and trimmed data.
 		const category = new Category({
 			name: req.body.name,
 			description: req.body.description,
 		});
 		if (!errors.isEmpty()) {
+			// There are errors. Render form again with sanitized values and error messages.
 			res.render('categories/form', {
 				title: 'Create Category',
 				category,
