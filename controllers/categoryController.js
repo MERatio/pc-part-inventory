@@ -25,13 +25,13 @@ exports.createPost = [
 	body('name')
 		.trim()
 		.isLength({ min: 3, max: 100 })
-		.escape()
-		.withMessage('Name must be 3 to 100 characters long'),
+		.withMessage('Name must be 3 to 100 characters long')
+		.escape(),
 	body('description')
 		.trim()
 		.isLength({ min: 10, max: 500 })
-		.escape()
-		.withMessage('Description must be 10 to 500 characters long'),
+		.withMessage('Description must be 10 to 500 characters long')
+		.escape(),
 	// Process request after validation and sanitization.
 	(req, res, next) => {
 		// Extract the validation errors from a request.
