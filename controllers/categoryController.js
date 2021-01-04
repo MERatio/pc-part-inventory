@@ -104,9 +104,49 @@ exports.updateGet = (req, res, next) => {
 	});
 };
 
-exports.updatePost = (req, res) => {
-	res.send('NOT IMPLEMENTED: Category update POST');
-};
+exports.updatePost = [
+	// Validate and sanitise fields.
+	body('name')
+		.trim()
+		.isLength({ min: 3, max: 100 })
+		.withMessage('Name must be 3 to 100 characters long')
+		.escape(),
+	body('description')
+		.trim()
+		.isLength({ min: 10, max: 500 })
+		.withMessage('Description must be 10 to 500 characters long')
+		.escape(),
+	// Process request after validation and sanitization.
+	(req, res, next) => {
+		// Extract the validation errors from a request.
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			// There are errors. Render form again with sanitized values and error messages.
+			res.render('categories/form', {
+				title: 'Update Category',
+				category: req.body,
+				errors: errors.array(),
+			});
+		} else {
+			// Data form is valid.
+			const categoryId = req.params.id;
+			// Create a Category object with escaped/trimmed data and old id.
+			const category = new Category({
+				name: req.body.name,
+				description: req.body.description,
+				_id: categoryId, // This is required, or a new ID will be assigned!
+			});
+			// Data from form is valid. Update the record.
+			Category.findByIdAndUpdate(
+				categoryId,
+				category,
+				{},
+				(err, updatedCategory) =>
+					err ? next(err) : res.redirect(updatedCategory.url)
+			);
+		}
+	},
+];
 
 exports.deleteGet = (req, res) => {
 	res.send('NOT IMPLEMENTED: Category delete GET');
