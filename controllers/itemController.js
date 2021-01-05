@@ -198,7 +198,16 @@ exports.updatePost = [
 ];
 
 exports.deleteGet = (req, res) => {
-	res.send('NOT IMPLEMENTED: Item delete GET');
+	Item.findById(req.params.id, 'name').exec((err, item) => {
+		if (err) {
+			next(err);
+		} else if (item === null) {
+			res.redirect('/items');
+		} else {
+			// Successful, so render.
+			res.render('items/delete', { title: 'Delete Item', item });
+		}
+	});
 };
 
 exports.deletePost = (req, res) => {
