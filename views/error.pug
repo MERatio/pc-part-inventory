@@ -1,6 +1,9 @@
 extends layout
 
 block content
-  h1= message
-  h2= error.status
-  pre #{error.stack}
+	main(class='container-fluid')
+		div(class='row justify-content-center')
+			div(class='col-md-8')
+				h1= message
+				h2= error.status
+				pre #{error.stack}
