@@ -211,5 +211,13 @@ exports.deleteGet = (req, res) => {
 };
 
 exports.deletePost = (req, res) => {
-	res.send('NOT IMPLEMENTED: Item delete POST');
+	// Item has no dependent objects. Delete object and redirect to the list of items.
+	Item.findByIdAndDelete(req.body.itemId, (err) => {
+		if (err) {
+			next(err);
+		} else {
+			// Success - go to items list
+			res.redirect('/items');
+		}
+	});
 };
