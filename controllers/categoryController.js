@@ -176,6 +176,33 @@ exports.deleteGet = (req, res, next) => {
 	);
 };
 
-exports.deletePost = (req, res) => {
-	res.send('NOT IMPLEMENTED: Category delete POST');
+exports.deletePost = (req, res, next) => {
+	const categoryId = req.body.categoryId;
+	async.parallel(
+		{
+			category(callback) {
+				Category.findById(categoryId, 'name').exec(callback);
+			},
+			categoryItems(callback) {
+				Item.find({ category: categoryId }, 'name').exec(callback);
+			},
+		},
+		(err, results) => {
+			if (err) {
+				next(err);
+			} else if (results.categoryItems.length > 0) {
+				// Category has items. Render in same way as for GET route.
+				res.render('categories/delete', {
+					title: 'Delete Category',
+					category: results.category,
+					categoryItems: results.categoryItems,
+				});
+			} else {
+				// Category has no items. Delete object and redirect to the list of categories.
+				Category.findByIdAndDelete(categoryId, (err) => {
+					err ? next(err) : res.redirect('/categories');
+				});
+			}
+		}
+	);
 };
