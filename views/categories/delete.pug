@@ -1,0 +1,27 @@
+extends ../layout
+
+block content
+	main(class='container-fluid')
+		div(class='row justify-content-center')
+			div(class='col-md-8')
+				if categoryItems.length
+					p #[strong Delete the following items before attempting to delete this category.]
+					h2 Items
+					ul(class='list-group')
+						each categoryItem in categoryItems
+							li(class='list-group-item')
+								a(href=categoryItem.url)= categoryItem.name	
+				else
+					header
+						h1= category.name
+					p Do you really want to delete this category?
+					form(method='POST' action='' class='mt-3')
+						div(class='mb-3')
+							input(
+								type='hidden' 
+								class='form-control' 
+								name='categoryId' 
+								value=category._id
+								required 
+							)
+						button(type='submit' class='btn btn-danger') Delete
