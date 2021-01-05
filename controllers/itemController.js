@@ -131,9 +131,71 @@ exports.updateGet = (req, res) => {
 	);
 };
 
-exports.updatePost = (req, res) => {
-	res.send('NOT IMPLEMENTED: Item update POST');
-};
+exports.updatePost = [
+	// Validate and sanitise fields.
+	body('name')
+		.trim()
+		.isLength({ min: 1, max: 100 })
+		.withMessage('Name must be 1 to 100 characters long')
+		.escape(),
+	body('description')
+		.trim()
+		.isLength({ min: 10, max: 500 })
+		.withMessage('Description must be 10 to 500 characters long')
+		.escape(),
+	body('category')
+		.isLength({ min: 1 })
+		.withMessage('Category must not be empty')
+		.escape(),
+	body('price')
+		.trim()
+		.isFloat({ min: 0, max: 999999 })
+		.withMessage('Price must be 0 to 999999 dollars')
+		.escape(),
+	body('stock')
+		.trim()
+		.isInt({ min: 0, max: 999999 })
+		.withMessage('Stock must be 0 to 999999')
+		.escape(),
+	// Process request after validation and sanitization.
+	(req, res, next) => {
+		// Extract the validation errors from a request.
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			// There are errors. Render form again with sanitized values and error messages.
+			// Get all categories for form
+			Category.find({}, 'name')
+				.sort({ name: 'asc' })
+				.exec((err, categories) => {
+					if (err) {
+						next(err);
+					} else {
+						res.render('items/form', {
+							title: 'Update Item',
+							item: req.body,
+							errors: errors.array(),
+						});
+					}
+				});
+		} else {
+			// Data from form is valid
+			const itemId = req.params.id;
+			// Create an Item object with escaped/trimmed data and old id.
+			const item = new Item({
+				name: req.body.name,
+				description: req.body.description,
+				category: req.body.category,
+				price: req.body.price,
+				stock: req.body.stock,
+				_id: itemId, // This is required, or a new ID will be assigned!
+			});
+			// Update the record
+			Item.findByIdAndUpdate(itemId, item, {}, (err, updatedItem) => {
+				err ? next(err) : res.redirect(item.url);
+			});
+		}
+	},
+];
 
 exports.deleteGet = (req, res) => {
 	res.send('NOT IMPLEMENTED: Item delete GET');
