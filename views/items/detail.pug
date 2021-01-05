@@ -9,7 +9,9 @@ block content
 				header
 					div(class='d-flex justify-content-between align-items-center')
 						h1= item.name
-						a(href=`${item.url}/update` class='link-primary') Update
+						div
+							a(href=`${item.url}/update` class='link-primary') Update
+							a(href=`${item.url}/delete` class='link-danger ms-3') Delete
 					a(href=item.category.url class='d-inline-block mb-1')= `${item.category.name} category`
 					p(class='fs-4 fw-bold mb-1')= `$${item.price}`
 					p(class='mb-1')= `Stock: ${item.stock}`
