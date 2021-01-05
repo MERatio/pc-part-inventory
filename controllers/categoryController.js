@@ -6,13 +6,14 @@ const { body, validationResult } = require('express-validator');
 exports.list = (req, res) => {
 	Category.find().exec((err, categories) => {
 		if (err) {
-			return next(err);
+			next(err);
+		} else {
+			res.render('categories/list', {
+				title: 'Categories',
+				path: 'categories',
+				categories,
+			});
 		}
-		res.render('categories/list', {
-			title: 'Categories',
-			path: 'categories',
-			categories,
-		});
 	});
 };
 
@@ -77,12 +78,10 @@ exports.detail = (req, res, next) => {
 				next(err);
 			} else {
 				// Success, so render.
-				const categoryName = results.category.name;
-				const { category, categoryItems } = results;
 				res.render('categories/detail', {
-					title: `${categoryName} Detail`,
-					category,
-					categoryItems,
+					title: `${results.category.name} Detail`,
+					category: results.category,
+					categoryItems: results.categoryItems,
 				});
 			}
 		}
