@@ -148,8 +148,32 @@ exports.updatePost = [
 	},
 ];
 
-exports.deleteGet = (req, res) => {
-	res.send('NOT IMPLEMENTED: Category delete GET');
+exports.deleteGet = (req, res, next) => {
+	const categoryId = req.params.id;
+	async.parallel(
+		{
+			category(callback) {
+				Category.findById(categoryId, 'name').exec(callback);
+			},
+			categoryItems(callback) {
+				Item.find({ category: categoryId }, 'name').exec(callback);
+			},
+		},
+		(err, results) => {
+			if (err) {
+				next(err);
+			} else if (results.category === null) {
+				res.redirect('/categories');
+			} else {
+				// Successful, so render.
+				res.render('categories/delete', {
+					title: 'Delete Category',
+					category: results.category,
+					categoryItems: results.categoryItems,
+				});
+			}
+		}
+	);
 };
 
 exports.deletePost = (req, res) => {
