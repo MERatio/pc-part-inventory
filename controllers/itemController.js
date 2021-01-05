@@ -103,7 +103,32 @@ exports.detail = (req, res, next) => {
 };
 
 exports.updateGet = (req, res) => {
-	res.send('NOT IMPLEMENTED: Item update GET');
+	async.parallel(
+		{
+			item(callback) {
+				Item.findById(req.params.id).exec(callback);
+			},
+			categories(callback) {
+				Category.find({}, 'name').sort({ name: 'asc' }).exec(callback);
+			},
+		},
+		(err, results) => {
+			if (err) {
+				next(err);
+			} else if (results.item === null) {
+				const err = new Error('Item not found');
+				err.status = 404;
+				next(err);
+			} else {
+				//Successful, so render
+				res.render('items/form', {
+					title: 'Update Item',
+					item: results.item,
+					categories: results.categories,
+				});
+			}
+		}
+	);
 };
 
 exports.updatePost = (req, res) => {
