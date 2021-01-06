@@ -68,7 +68,9 @@ exports.detail = (req, res, next) => {
 				Category.findById(categoryId).exec(callback);
 			},
 			categoryItems(callback) {
-				Item.find({ category: categoryId }, 'name price stock').exec(callback);
+				Item.find({ category: categoryId }, 'name price stock image').exec(
+					callback
+				);
 			},
 		},
 		(err, results) => {
@@ -157,7 +159,7 @@ exports.deleteGet = (req, res, next) => {
 				Category.findById(categoryId, 'name').exec(callback);
 			},
 			categoryItems(callback) {
-				Item.find({ category: categoryId }, 'name').exec(callback);
+				Item.find({ category: categoryId }, 'name image').exec(callback);
 			},
 		},
 		(err, results) => {

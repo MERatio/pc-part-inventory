@@ -2,6 +2,10 @@
 	--silver: #bdc3c7;
 }
 
+img {
+	max-width: 100%;
+}
+
 .categories {
 	list-style-type: none;
 	padding-left: 0;
@@ -21,4 +25,14 @@
 
 .category-card-title {
 	color: rgb(33, 37, 41);
+}
+
+.item-detail-img-container {
+	width: 200px;
+	border-radius: 2px;
+}
+
+.item-list-img-container {
+	width: 100px;
+	border-radius: 2px;
 }

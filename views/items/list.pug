@@ -10,18 +10,23 @@ block content
 				if items.length === 0
 					h2(class='text-center') No computer parts in our inventory.
 				else
-					table(class='table')
+					table(class='table align-middle')
 						thead
 							tr
-								th(scope='col') Name
+								th(scope='col' class='text-center') Name
 								th(scope='col') Category
 								th(scope='col') Price
 								th(scope='col') Stock
 						tbody
 							each item in items
 								tr
-									td
-										a(href=item.url)= item.name
+									td(class='d-flex align-items-center')
+										div(class='item-list-img-container')
+											a(href=item.url)
+												img(src=`/images/${item.image}` alt='Item image')
+										div(class='ms-3')
+											a(href=item.url)
+												p(class='mb-0')= item.name
 									td
 										a(href=item.category.url)= item.category.name
 									td(class='fw-bold')= `$${item.price}`

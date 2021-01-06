@@ -9,7 +9,7 @@ block content
 						for error in errors
 							li(class='list-group-item list-group-item-danger')!= error.msg
 				h1= title
-				form(method='POST' action='' class='mt-3')
+				form(method='POST' action='' enctype='multipart/form-data' class='mt-3')
 					div(class='mb-3')
 						input(
 							type='text' 
@@ -67,6 +67,16 @@ block content
 							placeholder='Stock' 
 							min=0
 							max=999999
+							required 
+						)
+					div(class='mb-3')
+						label(for='itemImage' class='form-label') Select image for this part
+						input(
+							type='file' 
+							class='form-control' 
+							id='itemImage'
+							name='image' 
+							value=(item ? item.image : '') 
 							required 
 						)
 					button(type='submit' class='btn btn-primary') Submit

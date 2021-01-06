@@ -14,16 +14,21 @@ block content
 				if categoryItems.length === 0
 					h2(class='text-center') No Items in this category.
 				else
-					table(class='table')
+					table(class='table align-middle')
 						thead
 							tr
-								th(scope='col') Name
+								th(scope='col' class='text-center') Name
 								th(scope='col') Price
 								th(scope='col') Stock
 						tbody
 							each categoryItem in categoryItems
 								tr
-									td
-										a(href=categoryItem.url)= categoryItem.name
+									td(class='d-flex align-items-center')
+										div(class='item-list-img-container')
+											a(href=categoryItem.url)
+												img(src=`/images/${categoryItem.image}` alt='Item image')
+										div(class='ms-3')
+											a(href=categoryItem.url)
+												p(class='mb-0')= categoryItem.name
 									td(class='fw-bold')= `$${categoryItem.price}`
 									td= categoryItem.stock

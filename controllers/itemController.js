@@ -2,9 +2,50 @@ const Item = require('../models/item');
 const Category = require('../models/category');
 const async = require('async');
 const { body, validationResult } = require('express-validator');
+const path = require('path');
+const multer = require('multer');
+
+// Multer config
+const storage = multer.diskStorage({
+	destination(req, file, cb) {
+		cb(null, 'public/images');
+	},
+	filename(req, file, cb) {
+		const uniquePrefix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+		cb(null, uniquePrefix + '-' + file.originalname);
+	},
+});
+
+const upload = multer({
+	storage,
+	fileFilter(req, file, cb) {
+		const ext = path.extname(file.originalname);
+		const validExt = [
+			'.apng',
+			'.avif',
+			'.gif',
+			'.jpg',
+			'.jpeg',
+			'.jfif',
+			'.pjpeg',
+			'.pjp',
+			'.png',
+			'.svg',
+			'.webp',
+		];
+
+		if (!validExt.includes(ext)) {
+			cb(null, false);
+			cb(new Error('Invalid file type, upload an image'));
+		} else {
+			cb(null, true);
+		}
+	},
+	limits: { fileSize: 3000000 },
+});
 
 exports.list = (req, res, next) => {
-	Item.find({}, 'name category price stock')
+	Item.find({}, 'name category price stock image')
 		.populate('category')
 		.exec((err, items) => {
 			if (err) {
@@ -32,6 +73,7 @@ exports.createGet = (req, res, next) => {
 };
 
 exports.createPost = [
+	upload.single('image'),
 	// Validate and sanitise fields.
 	body('name')
 		.trim()
@@ -68,6 +110,7 @@ exports.createPost = [
 			category: req.body.category,
 			price: req.body.price,
 			stock: req.body.stock,
+			image: req.file.filename,
 		});
 		if (!errors.isEmpty()) {
 			// There are errors. Render form again with sanitized values and error messages.
@@ -198,7 +241,7 @@ exports.updatePost = [
 ];
 
 exports.deleteGet = (req, res) => {
-	Item.findById(req.params.id, 'name').exec((err, item) => {
+	Item.findById(req.params.id, 'name image').exec((err, item) => {
 		if (err) {
 			next(err);
 		} else if (item === null) {
