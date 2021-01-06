@@ -4,17 +4,19 @@ const async = require('async');
 const { body, validationResult } = require('express-validator');
 
 exports.list = (req, res) => {
-	Category.find({}, 'name').exec((err, categories) => {
-		if (err) {
-			next(err);
-		} else {
-			res.render('categories/list', {
-				title: 'Categories',
-				path: 'categories',
-				categories,
-			});
-		}
-	});
+	Category.find({}, 'name')
+		.sort({ name: 'asc' })
+		.exec((err, categories) => {
+			if (err) {
+				next(err);
+			} else {
+				res.render('categories/list', {
+					title: 'Categories',
+					path: 'categories',
+					categories,
+				});
+			}
+		});
 };
 
 exports.createGet = (req, res) => {
