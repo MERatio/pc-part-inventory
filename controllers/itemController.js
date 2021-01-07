@@ -119,12 +119,22 @@ exports.createPost = [
 		});
 		if (!errors.isEmpty()) {
 			// There are errors. Render form again with sanitized values and error messages.
-			res.render('items/form', {
-				title: 'Create Item',
-				item,
-				action: 'create',
-				errors: errors.array(),
-			});
+			// Get all categories for form
+			Category.find({}, 'name')
+				.sort({ name: 'asc' })
+				.exec((err, categories) => {
+					if (err) {
+						next(err);
+					} else {
+						res.render('items/form', {
+							title: 'Create Item',
+							item,
+							categories,
+							action: 'create',
+							errors: errors.array(),
+						});
+					}
+				});
 		} else {
 			// Data form is valid.
 			item.save((err) => {
