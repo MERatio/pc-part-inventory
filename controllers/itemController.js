@@ -216,6 +216,7 @@ exports.updatePost = [
 						res.render('items/form', {
 							title: 'Update Item',
 							item: req.body,
+							categories,
 							errors: errors.array(),
 						});
 					}
