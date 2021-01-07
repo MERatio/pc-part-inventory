@@ -122,6 +122,7 @@ exports.createPost = [
 			res.render('items/form', {
 				title: 'Create Item',
 				item,
+				action: 'create',
 				errors: errors.array(),
 			});
 		} else {
