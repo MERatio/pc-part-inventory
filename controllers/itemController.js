@@ -224,6 +224,7 @@ exports.updatePost = [
 							title: 'Update Item',
 							item: req.body,
 							categories,
+							action: 'update',
 							errors: errors.array(),
 						});
 					}
