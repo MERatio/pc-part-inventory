@@ -67,7 +67,11 @@ exports.createGet = (req, res, next) => {
 			if (err) {
 				next(err);
 			} else {
-				res.render('items/form', { title: 'Create Item', categories });
+				res.render('items/form', {
+					title: 'Create Item',
+					categories,
+					action: 'create',
+				});
 			}
 		});
 };
@@ -168,6 +172,7 @@ exports.updateGet = (req, res) => {
 					title: 'Update Item',
 					item: results.item,
 					categories: results.categories,
+					action: 'update',
 				});
 			}
 		}
@@ -175,6 +180,7 @@ exports.updateGet = (req, res) => {
 };
 
 exports.updatePost = [
+	upload.single('image'),
 	// Validate and sanitise fields.
 	body('name')
 		.trim()
@@ -233,6 +239,21 @@ exports.updatePost = [
 				stock: req.body.stock,
 				_id: itemId, // This is required, or a new ID will be assigned!
 			});
+			if (!req.file) {
+				Item.findById(itemId, 'image').exec((err, oldItem) => {
+					if (err) {
+						next(err);
+					} else if (oldItem === null) {
+						const err = new Error('Item not found');
+						err.status = 404;
+						next(err);
+					} else {
+						item.image = oldItem.image;
+					}
+				});
+			} else {
+				item.image = req.file.filename;
+			}
 			// Update the record
 			Item.findByIdAndUpdate(itemId, item, {}, (err, updatedItem) => {
 				err ? next(err) : res.redirect(item.url);

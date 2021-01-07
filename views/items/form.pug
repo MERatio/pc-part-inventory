@@ -70,12 +70,13 @@ block content
 							required 
 						)
 					div(class='mb-3')
-						label(for='itemImage' class='form-label') Select image for this part
+						- const itemImageLabelText = `Select image for this part. ${action === 'update' ? '(Leave this field blank to use the old image)' : ''}`;
+						label(for='itemImage' class='form-label')= itemImageLabelText
 						input(
 							type='file' 
 							class='form-control' 
 							id='itemImage'
 							name='image' 
-							required 
+							required=(action === 'create')
 						)
 					button(type='submit' class='btn btn-primary') Submit
