@@ -150,7 +150,7 @@ exports.detail = (req, res, next) => {
 		});
 };
 
-exports.updateGet = (req, res) => {
+exports.updateGet = (req, res, next) => {
 	async.parallel(
 		{
 			item(callback) {
@@ -263,7 +263,7 @@ exports.updatePost = [
 	},
 ];
 
-exports.deleteGet = (req, res) => {
+exports.deleteGet = (req, res, next) => {
 	Item.findById(req.params.id, 'name image').exec((err, item) => {
 		if (err) {
 			next(err);

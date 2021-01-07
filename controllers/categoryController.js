@@ -3,7 +3,7 @@ const Item = require('../models/item');
 const async = require('async');
 const { body, validationResult } = require('express-validator');
 
-exports.list = (req, res) => {
+exports.list = (req, res, next) => {
 	Category.find({}, 'name')
 		.sort({ name: 'asc' })
 		.exec((err, categories) => {
