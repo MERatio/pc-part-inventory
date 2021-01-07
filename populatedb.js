@@ -46,8 +46,8 @@ const categoryCreate = (name, description, cb) => {
   });
 };
 
-const itemCreate = (name, description, category, price, stock, cb) => {
-  const itemDetail = { name, description, category, price, stock };
+const itemCreate = (name, description, category, price, stock, image, cb) => {
+  const itemDetail = { name, description, category, price, stock, image };
   const item = new Item(itemDetail);
   item.save((err) => {
     if (err) {
@@ -157,6 +157,7 @@ const createItems = (cb) => {
           categories[0],
           199.99,
           1902,
+          'AMD Ryzen 5 3600.webp',
           callback
         );
       },
@@ -167,6 +168,7 @@ const createItems = (cb) => {
           categories[0],
           269.0,
           2389,
+          'Intel Core i7-9700K.jpeg',
           callback
         );
       },
