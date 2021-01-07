@@ -4,6 +4,7 @@ const async = require('async');
 const { body, validationResult } = require('express-validator');
 const path = require('path');
 const multer = require('multer');
+const fs = require('fs');
 
 // Multer config
 const storage = multer.diskStorage({
@@ -275,12 +276,19 @@ exports.deleteGet = (req, res) => {
 	});
 };
 
-exports.deletePost = (req, res) => {
+exports.deletePost = (req, res, next) => {
 	// Item has no dependent objects. Delete object and redirect to the list of items.
-	Item.findByIdAndDelete(req.body.itemId, (err) => {
+	Item.findByIdAndDelete(req.body.itemId, (err, item) => {
 		if (err) {
 			next(err);
 		} else {
+			// Delete the image in public/images
+			fs.unlink(`public/images/${item.image}`, (err) => {
+				if (err) {
+					next(err);
+					return;
+				}
+			});
 			// Success - go to items list
 			res.redirect('/items');
 		}
