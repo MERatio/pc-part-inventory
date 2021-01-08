@@ -228,6 +228,13 @@ exports.updatePost = [
 		.isInt({ min: 0, max: 999999 })
 		.withMessage('Stock must be 0 to 999999')
 		.escape(),
+	body('adminPassword').custom((value, { req }) => {
+		if (value !== process.env.ADMIN_PASSWORD) {
+			throw new Error('Wrong admin password');
+		} else {
+			return true;
+		}
+	}),
 	// Process request after validation and sanitization.
 	(req, res, next) => {
 		// Extract the validation errors from a request.

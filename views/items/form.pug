@@ -79,4 +79,14 @@ block content
 							name='image' 
 							required=(action === 'create')
 						)
+					if action === 'update'
+						div(class='mb-3')
+							input(
+								type='password' 
+								class='form-control' 
+								name='adminPassword' 
+								placeholder='Admin Password'
+								maxlength='18' 
+								required 
+							)
 					button(type='submit' class='btn btn-primary') Submit
