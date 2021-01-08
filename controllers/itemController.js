@@ -263,33 +263,50 @@ exports.updatePost = [
 		} else {
 			// Data from form is valid
 			const itemId = req.params.id;
-			// Create an Item object with escaped/trimmed data and old id.
-			const item = new Item({
+			// Item data for creating the updated item.
+			const itemData = {
 				name: req.body.name,
 				description: req.body.description,
 				category: req.body.category,
 				price: req.body.price,
 				stock: req.body.stock,
 				_id: itemId, // This is required, or a new ID will be assigned!
-			});
-			if (!req.file) {
-				Item.findById(itemId, 'image').exec((err, oldItem) => {
-					if (err) {
-						next(err);
-					} else if (oldItem === null) {
-						const err = new Error('Item not found');
-						err.status = 404;
-						next(err);
+			};
+			// Find old item
+			Item.findById(itemId, 'image').exec((err, oldItem) => {
+				if (err) {
+					next(err);
+				} else if (oldItem === null) {
+					const err = new Error('Item not found');
+					err.status = 404;
+					next(err);
+				} else {
+					// No error in finding the old item.
+					// If there is no uploaded image.
+					if (!req.file) {
+						// Use the old image.
+						itemData.image = oldItem.image;
 					} else {
-						item.image = oldItem.image;
+						// If there's an uploaded image.
+						// Delete the old image
+						if (req.file) {
+							fs.unlink(`public/images/${oldItem.image}`, (err) => {
+								if (err) {
+									next(err);
+									return;
+								}
+							});
+						}
+						// Use the new uploaded image
+						itemData.image = req.file.filename;
 					}
+				}
+				// Create an Item object with escaped/trimmed data and old id.
+				const item = new Item(itemData);
+				// Update the record
+				Item.findByIdAndUpdate(itemId, item, {}, (err, updatedItem) => {
+					err ? next(err) : res.redirect(updatedItem.url);
 				});
-			} else {
-				item.image = req.file.filename;
-			}
-			// Update the record
-			Item.findByIdAndUpdate(itemId, item, {}, (err, updatedItem) => {
-				err ? next(err) : res.redirect(updatedItem.url);
 			});
 		}
 	},
