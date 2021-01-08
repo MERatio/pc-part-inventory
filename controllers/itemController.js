@@ -233,7 +233,16 @@ exports.updatePost = [
 		// Extract the validation errors from a request.
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
-			// There are errors. Render form again with sanitized values and error messages.
+			// There are errors.
+			// If there's an uploaded image delete it.
+			if (req.file) {
+				fs.unlink(`public/images/${req.file.filename}`, (err) => {
+					if (err) {
+						next(err);
+						return;
+					}
+				});
+			}
 			// Get all categories for form
 			Category.find({}, 'name')
 				.sort({ name: 'asc' })
@@ -241,6 +250,7 @@ exports.updatePost = [
 					if (err) {
 						next(err);
 					} else {
+						// Render form again with sanitized values and error messages.
 						res.render('items/form', {
 							title: 'Update Item',
 							item: req.body,
