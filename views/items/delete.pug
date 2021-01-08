@@ -4,6 +4,10 @@ block content
 	main(class='container-fluid')
 		div(class='row justify-content-center')
 			div(class='col-md-8')
+				if errors
+					ul(class='list-group mb-4')
+						for error in errors
+							li(class='list-group-item list-group-item-danger')!= error.msg
 				header(class='d-flex align-items-center mb-2')
 					div(class='item-detail-img-container')
 						img(src=`/images/${item.image}` alt='Item image')
@@ -16,6 +20,15 @@ block content
 							class='form-control' 
 							name='itemId' 
 							value=item._id
+							required 
+						)
+					div(class='mb-3')
+						input(
+							type='password' 
+							class='form-control' 
+							name='adminPassword' 
+							placeholder='Admin Password'
+							maxlength='18' 
 							required 
 						)
 					button(type='submit' class='btn btn-danger') Delete

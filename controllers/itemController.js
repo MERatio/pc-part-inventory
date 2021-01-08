@@ -325,21 +325,45 @@ exports.deleteGet = (req, res, next) => {
 	});
 };
 
-exports.deletePost = (req, res, next) => {
-	// Item has no dependent objects. Delete object and redirect to the list of items.
-	Item.findByIdAndDelete(req.body.itemId, (err, item) => {
-		if (err) {
-			next(err);
+exports.deletePost = [
+	body('adminPassword').custom((value, { req }) => {
+		if (value !== process.env.ADMIN_PASSWORD) {
+			throw new Error('Wrong admin password');
 		} else {
-			// Delete the image in public/images
-			fs.unlink(`public/images/${item.image}`, (err) => {
-				if (err) {
-					next(err);
-					return;
-				}
-			});
-			// Success - go to items list
-			res.redirect('/items');
+			return true;
 		}
-	});
-};
+	}),
+	(req, res, next) => {
+		// Extract the validation errors from a request.
+		const errors = validationResult(req);
+		Item.findById(req.body.itemId, (err, item) => {
+			if (err) {
+				next(err);
+			} else if (!errors.isEmpty()) {
+				// Wrong admin password. Render delete form with errors.
+				res.render('items/delete', {
+					title: 'Delete Item',
+					item,
+					errors: errors.array(),
+				});
+			} else {
+				// Item has no dependent objects. Delete object and redirect to the list of items.
+				Item.findByIdAndDelete(req.body.itemId, (err) => {
+					if (err) {
+						next(err);
+					} else {
+						// Delete the image in public/images
+						fs.unlink(`public/images/${item.image}`, (err) => {
+							if (err) {
+								next(err);
+								return;
+							}
+						});
+						// Success - go to items list
+						res.redirect('/items');
+					}
+				});
+			}
+		});
+	},
+];
