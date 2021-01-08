@@ -289,7 +289,7 @@ exports.updatePost = [
 			}
 			// Update the record
 			Item.findByIdAndUpdate(itemId, item, {}, (err, updatedItem) => {
-				err ? next(err) : res.redirect(item.url);
+				err ? next(err) : res.redirect(updatedItem.url);
 			});
 		}
 	},
