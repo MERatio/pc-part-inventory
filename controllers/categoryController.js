@@ -179,33 +179,48 @@ exports.deleteGet = (req, res, next) => {
 	);
 };
 
-exports.deletePost = (req, res, next) => {
-	const categoryId = req.body.categoryId;
-	async.parallel(
-		{
-			category(callback) {
-				Category.findById(categoryId, 'name').exec(callback);
-			},
-			categoryItems(callback) {
-				Item.find({ category: categoryId }, 'name').exec(callback);
-			},
-		},
-		(err, results) => {
-			if (err) {
-				next(err);
-			} else if (results.categoryItems.length > 0) {
-				// Category has items. Render in same way as for GET route.
-				res.render('categories/delete', {
-					title: 'Delete Category',
-					category: results.category,
-					categoryItems: results.categoryItems,
-				});
-			} else {
-				// Category has no items. Delete object and redirect to the list of categories.
-				Category.findByIdAndDelete(categoryId, (err) => {
-					err ? next(err) : res.redirect('/categories');
-				});
-			}
+exports.deletePost = [
+	body('adminPassword').custom((value, { req }) => {
+		if (value !== process.env.ADMIN_PASSWORD) {
+			throw new Error('Wrong admin password');
+		} else {
+			return true;
 		}
-	);
-};
+	}),
+	(req, res, next) => {
+		const categoryId = req.body.categoryId;
+		async.parallel(
+			{
+				category(callback) {
+					Category.findById(categoryId, 'name').exec(callback);
+				},
+				categoryItems(callback) {
+					Item.find({ category: categoryId }, 'name').exec(callback);
+				},
+			},
+			(err, results) => {
+				// Extract the validation errors from a request.
+				const errors = validationResult(req);
+				if (err) {
+					next(err);
+				} else if (!errors.isEmpty() || results.categoryItems.length > 0) {
+					// Wrong admin password or category has items. Render in same way as for GET route.
+					const locals = {
+						title: 'Delete Category',
+						category: results.category,
+						categoryItems: results.categoryItems,
+					};
+					if (!errors.isEmpty()) {
+						locals.errors = errors.array();
+					}
+					res.render('categories/delete', locals);
+				} else {
+					// Category has no items. Delete object and redirect to the list of categories.
+					Category.findByIdAndDelete(categoryId, (err) => {
+						err ? next(err) : res.redirect('/categories');
+					});
+				}
+			}
+		);
+	},
+];

@@ -17,6 +17,10 @@ block content
 									a(href=categoryItem.url)
 										p(class='mb-0')= categoryItem.name
 				else
+					if errors
+						ul(class='list-group')
+							for error in errors
+								li(class='list-group-item list-group-item-danger')!= error.msg
 					header
 						h1= category.name
 					p Do you really want to delete this category?
@@ -27,6 +31,15 @@ block content
 								class='form-control' 
 								name='categoryId' 
 								value=category._id
+								required 
+							)
+						div(class='mb-3')
+							input(
+								type='password' 
+								class='form-control' 
+								name='adminPassword' 
+								placeholder='Admin Password'
+								maxlength='18' 
 								required 
 							)
 						button(type='submit' class='btn btn-danger') Delete
