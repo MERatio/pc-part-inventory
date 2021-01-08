@@ -102,7 +102,11 @@ exports.updateGet = (req, res, next) => {
 			next(err);
 		} else {
 			//Successful, so render
-			res.render('categories/form', { title: 'Update Category', category });
+			res.render('categories/form', {
+				title: 'Update Category',
+				category,
+				action: 'update',
+			});
 		}
 	});
 };
@@ -119,6 +123,13 @@ exports.updatePost = [
 		.isLength({ min: 10, max: 500 })
 		.withMessage('Description must be 10 to 500 characters long')
 		.escape(),
+	body('adminPassword').custom((value, { req }) => {
+		if (value !== process.env.ADMIN_PASSWORD) {
+			throw new Error('Wrong admin password');
+		} else {
+			return true;
+		}
+	}),
 	// Process request after validation and sanitization.
 	(req, res, next) => {
 		// Extract the validation errors from a request.
@@ -128,6 +139,7 @@ exports.updatePost = [
 			res.render('categories/form', {
 				title: 'Update Category',
 				category: req.body,
+				action: 'update',
 				errors: errors.array(),
 			});
 		} else {
