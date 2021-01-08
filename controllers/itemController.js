@@ -118,7 +118,16 @@ exports.createPost = [
 			image: req.file.filename,
 		});
 		if (!errors.isEmpty()) {
-			// There are errors. Render form again with sanitized values and error messages.
+			// There are errors.
+			// If there's an uploaded image delete it.
+			if (req.file) {
+				fs.unlink(`public/images/${req.file.filename}`, (err) => {
+					if (err) {
+						next(err);
+						return;
+					}
+				});
+			}
 			// Get all categories for form
 			Category.find({}, 'name')
 				.sort({ name: 'asc' })
@@ -126,6 +135,7 @@ exports.createPost = [
 					if (err) {
 						next(err);
 					} else {
+						// Render form again with sanitized values and error messages.
 						res.render('items/form', {
 							title: 'Create Item',
 							item,
