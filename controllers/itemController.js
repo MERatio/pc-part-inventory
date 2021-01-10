@@ -106,6 +106,10 @@ exports.createPost = [
 		.escape(),
 	// Process request after validation and sanitization.
 	(req, res, next) => {
+		// Give more helpful error message if no item image is uploaded.
+		if (!req.file) {
+			throw new Error('Add an item image');
+		}
 		// Extract the validation errors from a request.
 		const errors = validationResult(req);
 		// Create an Item object with escaped and trimmed data.
