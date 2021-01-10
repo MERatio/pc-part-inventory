@@ -6,12 +6,15 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const compression = require('compression');
+const helmet = require('helmet');
 
 const indexRouter = require('./routes/index');
 const categoryRouter = require('./routes/category');
 const itemRouter = require('./routes/item');
 
 const app = express();
+
+app.use(helmet());
 
 // Set up mongoose connection
 const mongoose = require('mongoose');
