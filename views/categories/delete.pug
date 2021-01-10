@@ -18,10 +18,7 @@ block content
 											p(class='mb-0')= categoryItem.name
 				else
 					div(class='col-sm-6 col-lg-4')
-						if errors
-							ul(class='list-group')
-								for error in errors
-									li(class='list-group-item list-group-item-danger')!= error.msg
+						include ../includes/formError.pug
 						header
 							h1= category.name
 						p Do you really want to delete this category?

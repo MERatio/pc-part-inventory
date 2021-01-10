@@ -4,10 +4,7 @@ block content
 	main(class='container-fluid')
 		div(class='row justify-content-center')
 			div(class='col-md-8')
-				if errors
-					ul(class='list-group mb-4')
-						for error in errors
-							li(class='list-group-item list-group-item-danger')!= error.msg
+				include ../includes/formError.pug
 				header(class='d-flex align-items-center mb-2')
 					div(class='item-detail-img-container')
 						img(src=`/images/${item.image}` alt='Item image')
