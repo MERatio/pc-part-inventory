@@ -18,7 +18,7 @@ app.use(helmet());
 
 // Set up mongoose connection
 const mongoose = require('mongoose');
-const mongoDB = process.env.DEV_DB_STRING;
+const mongoDB = process.env.PROD_DB_STRING || process.env.DEV_DB_STRING;
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
